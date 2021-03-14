@@ -3,16 +3,17 @@
 #include "Assertions.h"
 #include "OwnPtr.h"
 #include "kmalloc.h"
-#include <new>
-#include <stdlib.h>
-#include <stdio.h>
 #include <algorithm>
+#include <new>
+#include <stdio.h>
+#include <stdlib.h>
 
 namespace AK {
 
-template<typename T> class Vector;
+template <typename T>
+class Vector;
 
-template<typename T>
+template <typename T>
 class VectorImpl {
 public:
     ~VectorImpl() { }
@@ -32,7 +33,10 @@ public:
 private:
     friend class Vector<T>;
 
-    VectorImpl(unsigned capacity) : m_capacity(capacity) { }
+    VectorImpl(unsigned capacity)
+        : m_capacity(capacity)
+    {
+    }
 
     T* tail() { return reinterpret_cast<T*>(this + 1); }
     T* slot(unsigned i) { return &tail()[i]; }
@@ -44,7 +48,7 @@ private:
     unsigned m_capacity;
 };
 
-template<typename T>
+template <typename T>
 class Vector {
 public:
     Vector() { }
@@ -128,11 +132,20 @@ public:
     class Iterator {
     public:
         bool operator!=(const Iterator& other) { return m_index != other.m_index; }
-        Iterator& operator++() { ++m_index; return *this; }
+        Iterator& operator++()
+        {
+            ++m_index;
+            return *this;
+        }
         T& operator*() { return m_vector[m_index]; }
+
     private:
         friend class Vector;
-        Iterator(Vector& vector, unsigned index) : m_vector(vector), m_index(index) { }
+        Iterator(Vector& vector, unsigned index)
+            : m_vector(vector)
+            , m_index(index)
+        {
+        }
         Vector& m_vector;
         unsigned m_index { 0 };
     };
@@ -143,11 +156,20 @@ public:
     class ConstIterator {
     public:
         bool operator!=(const ConstIterator& other) { return m_index != other.m_index; }
-        ConstIterator& operator++() { ++m_index; return *this; }
+        ConstIterator& operator++()
+        {
+            ++m_index;
+            return *this;
+        }
         const T& operator*() const { return m_vector[m_index]; }
+
     private:
         friend class Vector;
-        ConstIterator(const Vector& vector, const unsigned index) : m_vector(vector), m_index(index) { }
+        ConstIterator(const Vector& vector, const unsigned index)
+            : m_vector(vector)
+            , m_index(index)
+        {
+        }
         const Vector& m_vector;
         unsigned m_index { 0 };
     };

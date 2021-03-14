@@ -1,8 +1,8 @@
 #include "MappedFile.h"
+#include <cstdio>
+#include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <cstdio>
 
 namespace AK {
 

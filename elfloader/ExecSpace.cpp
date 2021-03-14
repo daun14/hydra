@@ -25,9 +25,9 @@ bool ExecSpace::loadELF(MappedFile&& file)
     printf("[ExecSpace] ELF loaded, symbol map now:\n");
     for (auto& s : m_symbols) {
         printf("> %p: %s (%u)\n",
-                s.value.ptr,
-                s.key.characters(),
-                s.value.size);
+            s.value.ptr,
+            s.key.characters(),
+            s.value.size);
     }
     return true;
 }
@@ -64,7 +64,6 @@ char* ExecSpace::symbolPtr(const char* name)
     }
     return nullptr;
 }
-
 
 char* ExecSpace::allocateArea(String&& name, unsigned size)
 {

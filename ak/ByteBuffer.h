@@ -2,9 +2,9 @@
 
 #include "buffer.h"
 #include "types.h"
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <cstdio>
 
 namespace AK {
 
@@ -39,8 +39,16 @@ public:
     bool operator!() const { return isNull(); }
     bool isNull() const { return m_impl == nullptr; }
 
-    byte& operator[](size_t i) { ASSERT(m_impl); return (*m_impl)[i]; }
-    byte operator[](size_t i) const { ASSERT(m_impl); return (*m_impl)[i]; }
+    byte& operator[](size_t i)
+    {
+        ASSERT(m_impl);
+        return (*m_impl)[i];
+    }
+    byte operator[](size_t i) const
+    {
+        ASSERT(m_impl);
+        return (*m_impl)[i];
+    }
     bool isEmpty() const { return !m_impl || m_impl->isEmpty(); }
     size_t size() const { return m_impl ? m_impl->size() : 0; }
 
@@ -62,9 +70,9 @@ public:
     ByteBuffer slice(size_t offset, size_t size) const
     {
         if (isNull())
-            return { };
+            return {};
         if (offset >= this->size())
-            return { };
+            return {};
         if (offset + size >= this->size())
             size = this->size() - offset;
         return copy(offsetPointer(offset), size);

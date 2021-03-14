@@ -38,7 +38,10 @@ public:
     const char* name() const { return eventNames[(unsigned)m_type]; }
 
 protected:
-    explicit Event(Type type) : m_type(type) { }
+    explicit Event(Type type)
+        : m_type(type)
+    {
+    }
 
 private:
     Type m_type { Invalid };

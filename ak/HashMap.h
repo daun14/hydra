@@ -5,7 +5,7 @@
 
 namespace AK {
 
-template<typename K, typename V>
+template <typename K, typename V>
 class HashMap {
 private:
     struct Entry {
@@ -69,20 +69,20 @@ private:
     HashTable<Entry, EntryTraits> m_table;
 };
 
-template<typename K, typename V>
+template <typename K, typename V>
 void HashMap<K, V>::set(const K& key, V&& value)
 {
-    m_table.set(Entry{key, std::move(value)});
+    m_table.set(Entry { key, std::move(value) });
 }
 
-template<typename K, typename V>
+template <typename K, typename V>
 auto HashMap<K, V>::find(const K& key) -> IteratorType
 {
     Entry dummy { key, V() };
     return m_table.find(dummy);
 }
 
-template<typename K, typename V>
+template <typename K, typename V>
 auto HashMap<K, V>::find(const K& key) const -> ConstIteratorType
 {
     Entry dummy { key, V() };

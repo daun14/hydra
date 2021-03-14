@@ -31,8 +31,8 @@ void FrameBufferSDL::initializeSDL()
 
     m_window = SDL_CreateWindow(
         "FrameBuffer",
-        SDL_WINDOWPOS_UNDEFINED, 
-        SDL_WINDOWPOS_UNDEFINED, 
+        SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED,
         width(),
         height(),
         SDL_WINDOW_SHOWN);

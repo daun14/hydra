@@ -1,9 +1,9 @@
 #include "VirtualFileSystem.h"
 #include "FileHandle.h"
 #include "FileSystem.h"
+#include "kmalloc.h"
 #include <cstdio>
 #include <cstdlib>
-#include "kmalloc.h"
 
 //#define VFS_DEBUG
 
@@ -154,13 +154,13 @@ bool VirtualFileSystem::isRoot(InodeIdentifier inode) const
     return inode == m_rootNode->inode;
 }
 
-template<typename F>
+template <typename F>
 void VirtualFileSystem::enumerateDirectoryInode(InodeIdentifier directoryInode, F func)
 {
     if (!directoryInode.isValid())
         return;
 
-    directoryInode.fileSystem()->enumerateDirectoryInode(directoryInode, [&] (const FileSystem::DirectoryEntry& entry) {
+    directoryInode.fileSystem()->enumerateDirectoryInode(directoryInode, [&](const FileSystem::DirectoryEntry& entry) {
         InodeIdentifier resolvedInode;
         if (auto mount = findMountForHost(entry.inode))
             resolvedInode = mount->guest();
@@ -184,7 +184,7 @@ void VirtualFileSystem::listDirectory(const String& path)
         return;
 
     printf("[VFS] ls %s -> %s %02u:%08u\n", path.characters(), directoryInode.fileSystem()->className(), directoryInode.fileSystemID(), directoryInode.index());
-    enumerateDirectoryInode(directoryInode, [&] (const FileSystem::DirectoryEntry& entry) {
+    enumerateDirectoryInode(directoryInode, [&](const FileSystem::DirectoryEntry& entry) {
         const char* nameColorBegin = "";
         const char* nameColorEnd = "";
         auto metadata = entry.inode.metadata();
@@ -229,8 +229,7 @@ void VirtualFileSystem::listDirectory(const String& path)
             metadata.mode & 00020 ? 'w' : '-',
             metadata.mode & 00010 ? 'x' : '-',
             metadata.mode & 00004 ? 'r' : '-',
-            metadata.mode & 00002 ? 'w' : '-'
-        );
+            metadata.mode & 00002 ? 'w' : '-');
 
         if (metadata.isSticky())
             printf("t");
@@ -242,12 +241,12 @@ void VirtualFileSystem::listDirectory(const String& path)
         printf("\033[30;1m");
         auto tm = *localtime(&metadata.mtime);
         printf("%04u-%02u-%02u %02u:%02u:%02u ",
-                tm.tm_year + 1900,
-                tm.tm_mon + 1,
-                tm.tm_mday,
-                tm.tm_hour,
-                tm.tm_min,
-                tm.tm_sec);
+            tm.tm_year + 1900,
+            tm.tm_mon + 1,
+            tm.tm_mday,
+            tm.tm_hour,
+            tm.tm_min,
+            tm.tm_sec);
         printf("\033[0m");
 
         printf("%s%s%s",
@@ -274,7 +273,7 @@ void VirtualFileSystem::listDirectoryRecursively(const String& path)
 
     printf("%s\n", path.characters());
 
-    enumerateDirectoryInode(directory, [&] (const FileSystem::DirectoryEntry& entry) {
+    enumerateDirectoryInode(directory, [&](const FileSystem::DirectoryEntry& entry) {
         auto metadata = entry.inode.metadata();
         if (metadata.isDirectory()) {
             if (entry.name != "." && entry.name != "..") {
@@ -318,7 +317,7 @@ InodeIdentifier VirtualFileSystem::resolveSymbolicLink(const String& basePath, I
 {
     auto symlinkContents = symlinkInode.readEntireFile();
     if (!symlinkContents)
-        return { };
+        return {};
     char buf[4096];
     sprintf(buf, "/%s/%s", basePath.characters(), String((const char*)symlinkContents.pointer(), symlinkContents.size()).characters());
     return resolvePath(buf);
@@ -378,7 +377,7 @@ InodeIdentifier VirtualFileSystem::resolvePath(const String& path)
             inode = resolveSymbolicLink(buf, inode);
             if (!inode.isValid()) {
                 printf("Symbolic link resolution failed :(\n");
-                return { };
+                return {};
             }
         }
     }

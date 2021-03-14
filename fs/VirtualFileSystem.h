@@ -1,11 +1,11 @@
 #pragma once
 
+#include "InodeIdentifier.h"
 #include <../ak/HashMap.h>
 #include <../ak/OwnPtr.h>
 #include <../ak/RetainPtr.h>
 #include <../ak/string.h>
 #include <../ak/vector.h>
-#include "InodeIdentifier.h"
 
 class FileHandle;
 class FileSystem;
@@ -50,10 +50,11 @@ public:
 
     bool isRoot(InodeIdentifier) const;
 
-    bool touch(const String&path);
+    bool touch(const String& path);
 
 private:
-    template<typename F> void enumerateDirectoryInode(InodeIdentifier, F func);
+    template <typename F>
+    void enumerateDirectoryInode(InodeIdentifier, F func);
     InodeIdentifier resolvePath(const String& path);
     InodeIdentifier resolveSymbolicLink(const String& basePath, InodeIdentifier symlinkInode);
 

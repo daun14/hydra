@@ -1,10 +1,10 @@
 #include "Ext2FileSystem.h"
 #include "ext2_fs.h"
+#include "kmalloc.h"
 #include <../ak/bitmap.h>
 #include <../ak/stdlib.h>
 #include <cstdio>
 #include <cstring>
-#include "kmalloc.h"
 
 //#define EXT2_DEBUG
 
@@ -135,10 +135,10 @@ ByteBuffer Ext2FileSystem::readBlockContainingInode(unsigned inode, unsigned& bl
     auto& superBlock = this->superBlock();
 
     if (inode != EXT2_ROOT_INO && inode < EXT2_FIRST_INO(&superBlock))
-        return { };
+        return {};
 
     if (inode > superBlock.s_inodes_count)
-        return { };
+        return {};
 
     auto& bgd = blockGroupDescriptor(groupIndexFromInode(inode));
 
@@ -208,7 +208,7 @@ Vector<unsigned> Ext2FileSystem::blockListForInode(const ext2_inode& e2inode) co
     if (!blocksRemaining)
         return list;
 
-    auto processBlockArray = [&] (unsigned arrayBlockIndex, std::function<void(unsigned)> callback) {
+    auto processBlockArray = [&](unsigned arrayBlockIndex, std::function<void(unsigned)> callback) {
         auto arrayBlock = readBlock(arrayBlockIndex);
         ASSERT(arrayBlock);
         auto* array = reinterpret_cast<const __u32*>(arrayBlock.pointer());
@@ -223,15 +223,15 @@ Vector<unsigned> Ext2FileSystem::blockListForInode(const ext2_inode& e2inode) co
         }
     };
 
-    processBlockArray(e2inode.i_block[EXT2_IND_BLOCK], [&] (unsigned entry) {
+    processBlockArray(e2inode.i_block[EXT2_IND_BLOCK], [&](unsigned entry) {
         list.append(entry);
     });
 
     if (!blocksRemaining)
         return list;
 
-    processBlockArray(e2inode.i_block[EXT2_DIND_BLOCK], [&] (unsigned entry) {
-        processBlockArray(entry, [&] (unsigned entry) {
+    processBlockArray(e2inode.i_block[EXT2_DIND_BLOCK], [&](unsigned entry) {
+        processBlockArray(entry, [&](unsigned entry) {
             list.append(entry);
         });
     });
@@ -239,9 +239,9 @@ Vector<unsigned> Ext2FileSystem::blockListForInode(const ext2_inode& e2inode) co
     if (!blocksRemaining)
         return list;
 
-    processBlockArray(e2inode.i_block[EXT2_TIND_BLOCK], [&] (unsigned entry) {
-        processBlockArray(entry, [&] (unsigned entry) {
-            processBlockArray(entry, [&] (unsigned entry) {
+    processBlockArray(e2inode.i_block[EXT2_TIND_BLOCK], [&](unsigned entry) {
+        processBlockArray(entry, [&](unsigned entry) {
+            processBlockArray(entry, [&](unsigned entry) {
                 list.append(entry);
             });
         });
@@ -366,13 +366,13 @@ bool Ext2FileSystem::addInodeToDirectory(unsigned directoryInode, unsigned inode
     ASSERT(e2inodeForDirectory);
     ASSERT(isDirectory(e2inodeForDirectory->i_mode));
 
-//#ifdef EXT2_DEBUG
+    //#ifdef EXT2_DEBUG
     printf("[ext2fs] Adding inode %u with name '%s' to directory %u\n", inode, name.characters(), directoryInode);
-//#endif
+    //#endif
 
     Vector<DirectoryEntry> entries;
     bool nameAlreadyExists = false;
-    enumerateDirectoryInode({ id(), directoryInode }, [&] (const DirectoryEntry& entry) {
+    enumerateDirectoryInode({ id(), directoryInode }, [&](const DirectoryEntry& entry) {
         if (entry.name == name) {
             nameAlreadyExists = true;
             return false;
@@ -508,7 +508,6 @@ unsigned Ext2FileSystem::inodesPerGroup() const
 unsigned Ext2FileSystem::inodeSize() const
 {
     return EXT2_INODE_SIZE(&superBlock());
-
 }
 unsigned Ext2FileSystem::blocksPerGroup() const
 {
@@ -537,14 +536,14 @@ void Ext2FileSystem::dumpBlockBitmap(unsigned groupIndex) const
 
 void Ext2FileSystem::dumpInodeBitmap(unsigned groupIndex) const
 {
-    traverseInodeBitmap(groupIndex, [] (unsigned, const Bitmap& bitmap) {
+    traverseInodeBitmap(groupIndex, [](unsigned, const Bitmap& bitmap) {
         for (unsigned i = 0; i < bitmap.size(); ++i)
             printf("%c", bitmap.get(i) ? '1' : '0');
         return true;
     });
 }
 
-template<typename F>
+template <typename F>
 void Ext2FileSystem::traverseInodeBitmap(unsigned groupIndex, F callback) const
 {
     ASSERT(groupIndex <= m_blockGroupCount);
@@ -605,7 +604,7 @@ unsigned Ext2FileSystem::allocateInode(unsigned preferredGroup, unsigned expecte
 
     unsigned groupIndex = 0;
 
-    auto isSuitableGroup = [this, neededBlocks] (unsigned groupIndex) {
+    auto isSuitableGroup = [this, neededBlocks](unsigned groupIndex) {
         auto& bgd = blockGroupDescriptor(groupIndex);
         return bgd.bg_free_inodes_count && bgd.bg_free_blocks_count >= neededBlocks;
     };
@@ -627,7 +626,7 @@ unsigned Ext2FileSystem::allocateInode(unsigned preferredGroup, unsigned expecte
     printf("[ext2fs] allocateInode: found suitable group [%u] for new inode with %u blocks needed :^)\n", groupIndex, neededBlocks);
 
     unsigned firstFreeInodeInGroup = 0;
-    traverseInodeBitmap(groupIndex, [&firstFreeInodeInGroup] (unsigned firstInodeInBitmap, const Bitmap& bitmap) {
+    traverseInodeBitmap(groupIndex, [&firstFreeInodeInGroup](unsigned firstInodeInBitmap, const Bitmap& bitmap) {
         for (unsigned i = 0; i < bitmap.size(); ++i) {
             if (!bitmap.get(i)) {
                 firstFreeInodeInGroup = firstInodeInBitmap + i;
@@ -706,9 +705,9 @@ InodeIdentifier Ext2FileSystem::createInode(InodeIdentifier parentInode, const S
     ASSERT(parentInode.fileSystemID() == id());
     ASSERT(isDirectoryInode(parentInode.index()));
 
-//#ifdef EXT2_DEBUG
+    //#ifdef EXT2_DEBUG
     printf("[ext2fs] Adding inode '%s' (mode %o) to parent directory %u:\n", name.characters(), mode, parentInode.index());
-//#endif
+    //#endif
 
     // NOTE: This doesn't commit the inode allocation just yet!
     auto inode = allocateInode(0, 0);
@@ -717,7 +716,7 @@ InodeIdentifier Ext2FileSystem::createInode(InodeIdentifier parentInode, const S
     bool success = addInodeToDirectory(parentInode.index(), inode, name);
     if (!success) {
         printf("[ext2fs] failed to add inode to directory :(\n");
-        return { };
+        return {};
     }
 
     // Looks like we're good, time to update the inode bitmap and group+global inode counters.

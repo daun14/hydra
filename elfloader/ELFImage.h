@@ -1,9 +1,9 @@
 #pragma once
 
+#include "elf.h"
 #include <../ak/HashMap.h>
 #include <../ak/MappedFile.h>
 #include <../ak/OwnPtr.h>
-#include "elf.h"
 
 class ELFImage {
 public:
@@ -78,7 +78,8 @@ public:
         }
         unsigned relocationCount() const { return entryCount(); }
         const Relocation relocation(unsigned index) const;
-        template<typename F> void forEachRelocation(F) const;
+        template <typename F>
+        void forEachRelocation(F) const;
     };
 
     class Relocation {
@@ -107,8 +108,10 @@ public:
     const Symbol symbol(unsigned) const;
     const Section section(unsigned) const;
 
-    template<typename F> void forEachSectionOfType(unsigned, F) const;
-    template<typename F> void forEachSymbol(F) const;
+    template <typename F>
+    void forEachSectionOfType(unsigned, F) const;
+    template <typename F>
+    void forEachSymbol(F) const;
 
     // NOTE: Returns section(0) if section with name is not found.
     // FIXME: I don't love this API.
@@ -130,7 +133,7 @@ private:
     unsigned m_stringTableSectionIndex { 0 };
 };
 
-template<typename F>
+template <typename F>
 inline void ELFImage::forEachSectionOfType(unsigned type, F func) const
 {
     for (unsigned i = 0; i < sectionCount(); ++i) {
@@ -140,14 +143,14 @@ inline void ELFImage::forEachSectionOfType(unsigned type, F func) const
     }
 }
 
-template<typename F>
+template <typename F>
 inline void ELFImage::RelocationSection::forEachRelocation(F func) const
 {
     for (unsigned i = 0; i < relocationCount(); ++i)
         func(relocation(i));
 }
 
-template<typename F>
+template <typename F>
 inline void ELFImage::forEachSymbol(F func) const
 {
     for (unsigned i = 0; i < symbolCount(); ++i)

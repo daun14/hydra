@@ -6,10 +6,10 @@
 #define ASSERT_NOT_REACHED() assert(false)
 
 namespace AK {
-	inline void notImplemented()
-	{
-		assert(false);
-	}	
+inline void notImplemented()
+{
+    assert(false);
+}
 }
 
 using AK::notImplemented;

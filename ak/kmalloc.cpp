@@ -1,7 +1,7 @@
-#include <cstdio>
 #include "SimpleMalloc.h"
-#include <new>
+#include <cstdio>
 #include <cstdlib>
+#include <new>
 
 #define USE_SYSTEM_MALLOC
 
@@ -28,7 +28,6 @@ void* krealloc(void* ptr, dword size)
 {
     return realloc(ptr, size);
 }
-
 }
 
 #else
@@ -62,7 +61,6 @@ void* krealloc(void* ptr, dword size)
         return ptr;
     return SimpleMalloc::reallocate((byte*)ptr, size);
 }
-
 }
 
 void* operator new(std::size_t size)

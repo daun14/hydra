@@ -3,8 +3,8 @@
 #include "ByteBuffer.h"
 #include "RetainPtr.h"
 #include "StringImpl.h"
-#include "traits.h"
 #include "Vector.h"
+#include "traits.h"
 #include <cstdio>
 
 namespace AK {
@@ -63,7 +63,11 @@ public:
     bool isEmpty() const { return length() == 0; }
     unsigned length() const { return m_impl ? m_impl->length() : 0; }
     const char* characters() const { return m_impl ? m_impl->characters() : nullptr; }
-    char operator[](unsigned i) const { ASSERT(m_impl); return (*m_impl)[i]; }
+    char operator[](unsigned i) const
+    {
+        ASSERT(m_impl);
+        return (*m_impl)[i];
+    }
 
     bool operator==(const String&) const;
     bool operator!=(const String& other) const { return !(*this == other); }
@@ -87,7 +91,7 @@ private:
     RetainPtr<StringImpl> m_impl;
 };
 
-template<>
+template <>
 struct Traits<String> {
     static unsigned hash(const String& s) { return s.impl() ? s.impl()->hash() : 0; }
     static void dump(const String& s) { printf("%s", s.characters()); }

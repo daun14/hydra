@@ -10,9 +10,10 @@
 
 namespace AK {
 
-template<typename T, typename = Traits<T>> class HashTable;
+template <typename T, typename = Traits<T>>
+class HashTable;
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 class HashTable {
 private:
     struct Bucket {
@@ -102,6 +103,7 @@ public:
                     return;
             }
         }
+
     private:
         friend class HashTable;
         explicit Iterator(HashTable& table, bool isEnd, typename SinglyLinkedList<T>::Iterator bucketIterator = SinglyLinkedList<T>::Iterator::universalEnd())
@@ -177,6 +179,7 @@ public:
                     return;
             }
         }
+
     private:
         friend class HashTable;
         ConstIterator(const HashTable& table, bool isEnd, typename SinglyLinkedList<T>::ConstIterator bucketIterator = SinglyLinkedList<T>::ConstIterator::universalEnd())
@@ -219,7 +222,7 @@ private:
     unsigned m_capacity { 0 };
 };
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 void HashTable<T, TraitsForT>::set(T&& value)
 {
     if (!m_capacity)
@@ -238,7 +241,7 @@ void HashTable<T, TraitsForT>::set(T&& value)
     m_size++;
 }
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 void HashTable<T, TraitsForT>::rehash(unsigned newCapacity)
 {
     newCapacity *= 2;
@@ -260,25 +263,25 @@ void HashTable<T, TraitsForT>::rehash(unsigned newCapacity)
         }
     }
 
-    delete [] oldBuckets;
+    delete[] oldBuckets;
 }
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 void HashTable<T, TraitsForT>::clear()
 {
-    delete [] m_buckets;
+    delete[] m_buckets;
     m_capacity = 0;
     m_size = 0;
 }
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 void HashTable<T, TraitsForT>::insert(T&& value)
 {
     auto& bucket = lookup(value);
     bucket.chain.append(std::move(value));
 }
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 bool HashTable<T, TraitsForT>::contains(const T& value) const
 {
     if (isEmpty())
@@ -291,7 +294,7 @@ bool HashTable<T, TraitsForT>::contains(const T& value) const
     return false;
 }
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 auto HashTable<T, TraitsForT>::find(const T& value) -> Iterator
 {
     if (isEmpty())
@@ -303,7 +306,7 @@ auto HashTable<T, TraitsForT>::find(const T& value) -> Iterator
     return end();
 }
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 auto HashTable<T, TraitsForT>::find(const T& value) const -> ConstIterator
 {
     if (isEmpty())
@@ -315,7 +318,7 @@ auto HashTable<T, TraitsForT>::find(const T& value) const -> ConstIterator
     return end();
 }
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 typename HashTable<T, TraitsForT>::Bucket& HashTable<T, TraitsForT>::lookup(const T& value)
 {
     unsigned hash = TraitsForT::hash(value);
@@ -327,7 +330,7 @@ typename HashTable<T, TraitsForT>::Bucket& HashTable<T, TraitsForT>::lookup(cons
     return m_buckets[hash % m_capacity];
 }
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 const typename HashTable<T, TraitsForT>::Bucket& HashTable<T, TraitsForT>::lookup(const T& value) const
 {
     unsigned hash = TraitsForT::hash(value);
@@ -339,7 +342,7 @@ const typename HashTable<T, TraitsForT>::Bucket& HashTable<T, TraitsForT>::looku
     return m_buckets[hash % m_capacity];
 }
 
-template<typename T, typename TraitsForT>
+template <typename T, typename TraitsForT>
 void HashTable<T, TraitsForT>::dump() const
 {
     printf("HashTable{%p} m_size=%u, m_capacity=%u, m_buckets=%p\n", this, m_size, m_capacity, m_buckets);

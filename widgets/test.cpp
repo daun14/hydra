@@ -1,5 +1,5 @@
-#include "FrameBufferSDL.h"
 #include "EventLoopSDL.h"
+#include "FrameBufferSDL.h"
 #include "RootWidget.h"
 #include <cstdio>
 

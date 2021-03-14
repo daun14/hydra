@@ -102,18 +102,18 @@ InodeMetadata SyntheticFileSystem::inodeMetadata(InodeIdentifier inode) const
 
 bool SyntheticFileSystem::setModificationTime(InodeIdentifier, dword timestamp)
 {
-    (void) timestamp;
+    (void)timestamp;
     printf("FIXME: Implement SyntheticFileSystem::setModificationTime().\n");
     return false;
 }
 
 InodeIdentifier SyntheticFileSystem::createInode(InodeIdentifier parentInode, const String& name, word mode)
 {
-    (void) parentInode;
-    (void) name;
-    (void) mode;
+    (void)parentInode;
+    (void)name;
+    (void)mode;
     printf("FIXME: Implement SyntheticFileSystem::createDirectoryInode().\n");
-    return { };
+    return {};
 }
 
 bool SyntheticFileSystem::writeInode(InodeIdentifier, const ByteBuffer&)

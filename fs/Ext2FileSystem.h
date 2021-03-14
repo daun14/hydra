@@ -1,8 +1,8 @@
 #pragma once
 
 #include "DeviceBackedFileSystem.h"
-#include <../ak/buffer.h>
 #include <../ak/OwnPtr.h>
+#include <../ak/buffer.h>
 
 struct ext2_group_desc;
 struct ext2_inode;
@@ -50,7 +50,7 @@ private:
     void dumpBlockBitmap(unsigned groupIndex) const;
     void dumpInodeBitmap(unsigned groupIndex) const;
 
-    template<typename F>
+    template <typename F>
     void traverseInodeBitmap(unsigned groupIndex, F) const;
 
     bool addInodeToDirectory(unsigned directoryInode, unsigned inode, const String& name);

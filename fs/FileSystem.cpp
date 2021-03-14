@@ -1,6 +1,6 @@
-#include <../ak/assertions.h>
-#include <../ak/HashMap.h>
 #include "FileSystem.h"
+#include <../ak/HashMap.h>
+#include <../ak/assertions.h>
 
 static dword s_lastFileSystemID = 0;
 
@@ -33,7 +33,7 @@ FileSystem* FileSystem::fromID(dword id)
 InodeIdentifier FileSystem::childOfDirectoryInodeWithName(InodeIdentifier inode, const String& name)
 {
     InodeIdentifier foundInode;
-    enumerateDirectoryInode(inode, [&] (const DirectoryEntry& entry) {
+    enumerateDirectoryInode(inode, [&](const DirectoryEntry& entry) {
         if (entry.name == name) {
             foundInode = entry.inode;
             return false;

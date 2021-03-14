@@ -1,6 +1,6 @@
 #include "AbstractScreen.h"
-#include "EventLoop.h"
 #include "Event.h"
+#include "EventLoop.h"
 #include "Widget.h"
 #include <../ak/assertions.h>
 
@@ -29,7 +29,7 @@ void AbstractScreen::setRootWidget(Widget* widget)
     // FIXME: Should we support switching root widgets?
     ASSERT(!m_rootWidget);
     ASSERT(widget);
-    
+
     m_rootWidget = widget;
     EventLoop::main().postEvent(m_rootWidget, make<ShowEvent>());
 }

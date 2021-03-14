@@ -6,8 +6,8 @@
 #include <../ak/ByteBuffer.h>
 #include <../ak/HashMap.h>
 #include <../ak/OwnPtr.h>
-#include <../ak/Retainable.h>
 #include <../ak/RetainPtr.h>
+#include <../ak/Retainable.h>
 #include <../ak/string.h>
 #include <functional>
 
@@ -70,7 +70,7 @@ inline bool InodeIdentifier::isRootInode() const
 
 namespace AK {
 
-template<>
+template <>
 struct Traits<InodeIdentifier> {
     // FIXME: This is a shitty hash.
     static unsigned hash(const InodeIdentifier& inode) { return Traits<unsigned>::hash(inode.fileSystemID()) + Traits<unsigned>::hash(inode.index()); }

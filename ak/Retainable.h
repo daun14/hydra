@@ -4,7 +4,7 @@
 
 namespace AK {
 
-template<typename T>
+template <typename T>
 class Retainable {
 public:
     Retainable() { }

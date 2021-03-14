@@ -1,7 +1,7 @@
 #include "ELFImage.h"
 #include <cstdio>
-#include <cstring>
 #include <cstdlib>
+#include <cstring>
 
 ELFImage::ELFImage(MappedFile&& file)
     : m_file(std::move(file))
@@ -16,12 +16,18 @@ ELFImage::~ELFImage()
 static const char* objectFileTypeToString(Elf32_Half type)
 {
     switch (type) {
-    case ET_NONE: return "None";
-    case ET_REL: return "Relocatable";
-    case ET_EXEC: return "Executable";
-    case ET_DYN: return "Shared object";
-    case ET_CORE: return "Core";
-    default: return "(?)";
+    case ET_NONE:
+        return "None";
+    case ET_REL:
+        return "Relocatable";
+    case ET_EXEC:
+        return "Executable";
+    case ET_DYN:
+        return "Shared object";
+    case ET_CORE:
+        return "Core";
+    default:
+        return "(?)";
     }
 }
 

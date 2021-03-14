@@ -25,7 +25,7 @@ String String::empty()
 Vector<String> String::split(const char separator) const
 {
     if (isEmpty())
-        return { };
+        return {};
 
     Vector<String> parts;
 

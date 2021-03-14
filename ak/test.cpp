@@ -1,12 +1,12 @@
 #include "String.h"
 //#include "StringBuilder.h"
-#include "Vector.h"
-#include <stdio.h>
+#include "Buffer.h"
+#include "HashMap.h"
 #include "HashTable.h"
 #include "SinglyLinkedList.h"
-#include "HashMap.h"
 #include "TemporaryFile.h"
-#include "Buffer.h"
+#include "Vector.h"
+#include <stdio.h>
 
 int main(int, char**)
 {
@@ -122,9 +122,9 @@ int main(int, char**)
     printf("charbuf.size() = %u\n", charbuf->size());
 
     {
-    Vector<String> problem;
-    for (int i = 0; i < 256; ++i)
-        problem.append("test");
+        Vector<String> problem;
+        for (int i = 0; i < 256; ++i)
+            problem.append("test");
     }
 
     return 0;

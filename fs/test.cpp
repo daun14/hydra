@@ -1,11 +1,11 @@
 #include "Ext2FileSystem.h"
 #include "FileBackedBlockDevice.h"
-#include "VirtualFileSystem.h"
 #include "FileHandle.h"
 #include "SyntheticFileSystem.h"
-#include <cstring>
+#include "VirtualFileSystem.h"
 #include <../ak/SimpleMalloc.h>
 #include <../ak/kmalloc.h>
+#include <cstring>
 
 static RetainPtr<FileSystem> makeFileSystem(const char* imagePath);
 
@@ -119,7 +119,6 @@ int main(int c, char** v)
             vfs.touch(buf);
             continue;
         }
-
 
         if (cmd == "cat" && parts.size() > 1) {
             char pathbuf[1024];

@@ -1,5 +1,4 @@
-#if (!defined(_LINUX_TYPES_H) && !defined(_BLKID_TYPES_H) && \
-    !defined(_EXT2_TYPES_H))
+#if (!defined(_LINUX_TYPES_H) && !defined(_BLKID_TYPES_H) && !defined(_EXT2_TYPES_H))
 #define _EXT2_TYPES_H
 
 #define __S8_TYPEDEF __signed__ char
@@ -27,12 +26,12 @@ typedef signed char __s8;
 typedef __U16_TYPEDEF __u16;
 #else
 #if (4 == 2)
-typedef	unsigned int	__u16;
+typedef unsigned int __u16;
 #else
 #if (2 == 2)
-typedef	unsigned short	__u16;
+typedef unsigned short __u16;
 #else
-  ?==error: undefined 16 bit type
+? == error : undefined 16 bit type
 #endif /* SIZEOF_SHORT == 2 */
 #endif /* SIZEOF_INT == 2 */
 #endif /* __U16_TYPEDEF */
@@ -41,30 +40,31 @@ typedef	unsigned short	__u16;
 typedef __S16_TYPEDEF __s16;
 #else
 #if (4 == 2)
-typedef	int		__s16;
+typedef int __s16;
 #else
 #if (2 == 2)
-typedef	short		__s16;
+typedef short __s16;
 #else
-  ?==error: undefined 16 bit type
+        ? == error
+        : undefined 16 bit type
 #endif /* SIZEOF_SHORT == 2 */
 #endif /* SIZEOF_INT == 2 */
 #endif /* __S16_TYPEDEF */
-
 
 #ifdef __U32_TYPEDEF
 typedef __U32_TYPEDEF __u32;
 #else
 #if (4 == 4)
-typedef	unsigned int	__u32;
+typedef unsigned int __u32;
 #else
 #if (4 == 4)
-typedef	unsigned long	__u32;
+typedef unsigned long __u32;
 #else
 #if (2 == 4)
-typedef	unsigned short	__u32;
+        typedef unsigned short __u32;
 #else
- ?== error: undefined 32 bit type
+            ? == error
+            : undefined 32 bit type
 #endif /* SIZEOF_SHORT == 4 */
 #endif /* SIZEOF_LONG == 4 */
 #endif /* SIZEOF_INT == 4 */
@@ -74,15 +74,16 @@ typedef	unsigned short	__u32;
 typedef __S32_TYPEDEF __s32;
 #else
 #if (4 == 4)
-typedef	int		__s32;
+typedef int __s32;
 #else
 #if (4 == 4)
-typedef	long		__s32;
+typedef long __s32;
 #else
 #if (2 == 4)
-typedef	short		__s32;
+typedef short __s32;
 #else
- ?== error: undefined 32 bit type
+                ? == error
+                : undefined 32 bit type
 #endif /* SIZEOF_SHORT == 4 */
 #endif /* SIZEOF_LONG == 4 */
 #endif /* SIZEOF_INT == 4 */
@@ -92,13 +93,13 @@ typedef	short		__s32;
 typedef __U64_TYPEDEF __u64;
 #else
 #if (4 == 8)
-typedef unsigned int	__u64;
+typedef unsigned int __u64;
 #else
 #if (4 == 8)
-typedef unsigned long	__u64;
+typedef unsigned long __u64;
 #else
 #if (8 == 8)
-typedef unsigned long long	__u64;
+typedef unsigned long long __u64;
 #endif /* SIZEOF_LONG_LONG == 8 */
 #endif /* SIZEOF_LONG == 8 */
 #endif /* SIZEOF_INT == 8 */
@@ -108,16 +109,16 @@ typedef unsigned long long	__u64;
 typedef __S64_TYPEDEF __s64;
 #else
 #if (4 == 8)
-typedef int		__s64;
+typedef int __s64;
 #else
 #if (4 == 8)
-typedef long		__s64;
+typedef long __s64;
 #else
 #if (8 == 8)
 #if defined(__GNUC__)
-typedef __signed__ long long 	__s64;
+typedef __signed__ long long __s64;
 #else
-typedef signed long long 	__s64;
+typedef signed long long __s64;
 #endif /* __GNUC__ */
 #endif /* SIZEOF_LONG_LONG == 8 */
 #endif /* SIZEOF_LONG == 8 */

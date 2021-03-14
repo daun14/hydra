@@ -1,15 +1,15 @@
 #pragma once
 
-#include "assertions.h"
-#include "Retainable.h"
 #include "RetainPtr.h"
+#include "Retainable.h"
+#include "assertions.h"
+#include "kmalloc.h"
 #include <cstdlib>
 #include <cstring>
-#include "kmalloc.h"
 
 namespace AK {
 
-template<typename T>
+template <typename T>
 class Buffer : public Retainable<Buffer<T>> {
 public:
     static RetainPtr<Buffer> createUninitialized(size_t count);
@@ -27,8 +27,16 @@ public:
         m_elements = nullptr;
     }
 
-    T& operator[](size_t i) { ASSERT(i < m_size); return m_elements[i]; }
-    const T& operator[](size_t i) const { ASSERT(i < m_size); return m_elements[i]; }
+    T& operator[](size_t i)
+    {
+        ASSERT(i < m_size);
+        return m_elements[i];
+    }
+    const T& operator[](size_t i) const
+    {
+        ASSERT(i < m_size);
+        return m_elements[i];
+    }
     bool isEmpty() const { return !m_size; }
     size_t size() const { return m_size; }
 
@@ -48,7 +56,10 @@ public:
     }
 
 private:
-    enum ConstructionMode { Uninitialized, Copy, Wrap, Adopt };
+    enum ConstructionMode { Uninitialized,
+        Copy,
+        Wrap,
+        Adopt };
     explicit Buffer(size_t); // For ConstructionMode=Uninitialized
     Buffer(const T*, size_t, ConstructionMode); // For ConstructionMode=Copy
     Buffer(T*, size_t, ConstructionMode); // For ConstructionMode=Wrap/Adopt
@@ -59,7 +70,7 @@ private:
     bool m_owned { false };
 };
 
-template<typename T>
+template <typename T>
 inline Buffer<T>::Buffer(size_t size)
     : m_size(size)
 {
@@ -67,7 +78,7 @@ inline Buffer<T>::Buffer(size_t size)
     m_owned = true;
 }
 
-template<typename T>
+template <typename T>
 inline Buffer<T>::Buffer(const T* elements, size_t size, ConstructionMode mode)
     : m_size(size)
 {
@@ -77,7 +88,7 @@ inline Buffer<T>::Buffer(const T* elements, size_t size, ConstructionMode mode)
     m_owned = true;
 }
 
-template<typename T>
+template <typename T>
 inline Buffer<T>::Buffer(T* elements, size_t size, ConstructionMode mode)
     : m_elements(elements)
     , m_size(size)
@@ -87,28 +98,27 @@ inline Buffer<T>::Buffer(T* elements, size_t size, ConstructionMode mode)
     } else if (mode == Wrap) {
         m_owned = false;
     }
-
 }
 
-template<typename T>
+template <typename T>
 inline RetainPtr<Buffer<T>> Buffer<T>::createUninitialized(size_t size)
 {
     return ::adopt(*new Buffer<T>(size));
 }
 
-template<typename T>
+template <typename T>
 inline RetainPtr<Buffer<T>> Buffer<T>::copy(const T* elements, size_t size)
 {
     return ::adopt(*new Buffer<T>(elements, size, Copy));
 }
 
-template<typename T>
+template <typename T>
 inline RetainPtr<Buffer<T>> Buffer<T>::wrap(T* elements, size_t size)
 {
     return ::adopt(*new Buffer<T>(elements, size, Wrap));
 }
 
-template<typename T>
+template <typename T>
 inline RetainPtr<Buffer<T>> Buffer<T>::adopt(T* elements, size_t size)
 {
     return ::adopt(*new Buffer<T>(elements, size, Adopt));

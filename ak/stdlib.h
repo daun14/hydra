@@ -2,29 +2,29 @@
 
 namespace AK {
 
-template<typename T>
+template <typename T>
 inline T min(const T& a, const T& b)
 {
-	return a < b ? a : b;
+    return a < b ? a : b;
 }
 
-template<typename T>
+template <typename T>
 inline T max(const T& a, const T& b)
 {
-	return a < b ? b : a;
+    return a < b ? b : a;
 }
- 
-template<typename T>
+
+template <typename T>
 static inline T ceilDiv(T a, T b)
 {
-	T result = a / b;
-	if ((a % b) != 0)
-		++result;
-	return result;
+    T result = a / b;
+    if ((a % b) != 0)
+        ++result;
+    return result;
 }
 
 }
 
-using AK::min;
 using AK::max;
+using AK::min;
 using AK::cellDiv

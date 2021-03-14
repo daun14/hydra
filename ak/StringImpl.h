@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Retainable.h"
 #include "RetainPtr.h"
+#include "Retainable.h"
 
 namespace AK {
 
@@ -19,7 +19,11 @@ public:
 
     unsigned length() const { return m_length; }
     const char* characters() const { return m_characters; }
-    char operator[](unsigned i) const { ASSERT(i < m_length); return m_characters[i]; }
+    char operator[](unsigned i) const
+    {
+        ASSERT(i < m_length);
+        return m_characters[i];
+    }
 
     unsigned hash() const
     {
@@ -30,10 +34,17 @@ public:
 
 private:
     enum ConstructTheEmptyStringImplTag { ConstructTheEmptyStringImpl };
-    explicit StringImpl(ConstructTheEmptyStringImplTag) : m_characters("") { }
+    explicit StringImpl(ConstructTheEmptyStringImplTag)
+        : m_characters("")
+    {
+    }
 
     enum ConstructWithInlineBufferTag { ConstructWithInlineBuffer };
-    explicit StringImpl(ConstructWithInlineBufferTag, unsigned length) : m_length(length), m_characters(m_inlineBuffer) { }
+    explicit StringImpl(ConstructWithInlineBufferTag, unsigned length)
+        : m_length(length)
+        , m_characters(m_inlineBuffer)
+    {
+    }
 
     void computeHash() const;
 

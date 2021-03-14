@@ -4,7 +4,7 @@
 
 namespace AK {
 
-template<typename T>
+template <typename T>
 class SinglyLinkedList {
 private:
     struct Node {
@@ -18,10 +18,26 @@ public:
 
     bool isEmpty() const { return !head(); }
 
-    T& first() { ASSERT(head()); return head()->value; }
-    const T& first() const { ASSERT(head()); return head()->value; }
-    T& last() { ASSERT(head()); return tail()->value; }
-    const T& last() const { ASSERT(head()); return tail()->value; }
+    T& first()
+    {
+        ASSERT(head());
+        return head()->value;
+    }
+    const T& first() const
+    {
+        ASSERT(head());
+        return head()->value;
+    }
+    T& last()
+    {
+        ASSERT(head());
+        return tail()->value;
+    }
+    const T& last() const
+    {
+        ASSERT(head());
+        return tail()->value;
+    }
 
     void append(T&& value)
     {
@@ -48,13 +64,21 @@ public:
     class Iterator {
     public:
         bool operator!=(const Iterator& other) { return m_node != other.m_node; }
-        Iterator& operator++() { m_node = m_node->next; return *this; }
+        Iterator& operator++()
+        {
+            m_node = m_node->next;
+            return *this;
+        }
         T& operator*() { return m_node->value; }
         bool isEnd() const { return !m_node; }
         static Iterator universalEnd() { return Iterator(nullptr); }
+
     private:
         friend class SinglyLinkedList;
-        explicit Iterator(SinglyLinkedList::Node* node) : m_node(node) { }
+        explicit Iterator(SinglyLinkedList::Node* node)
+            : m_node(node)
+        {
+        }
         SinglyLinkedList::Node* m_node;
     };
 
@@ -64,13 +88,21 @@ public:
     class ConstIterator {
     public:
         bool operator!=(const ConstIterator& other) { return m_node != other.m_node; }
-        ConstIterator& operator++() { m_node = m_node->next; return *this; }
+        ConstIterator& operator++()
+        {
+            m_node = m_node->next;
+            return *this;
+        }
         const T& operator*() const { return m_node->value; }
         bool isEnd() const { return !m_node; }
         static ConstIterator universalEnd() { return ConstIterator(nullptr); }
+
     private:
         friend class SinglyLinkedList;
-        explicit ConstIterator(const SinglyLinkedList::Node* node) : m_node(node) { }
+        explicit ConstIterator(const SinglyLinkedList::Node* node)
+            : m_node(node)
+        {
+        }
         const SinglyLinkedList::Node* m_node;
     };
 
